@@ -13,6 +13,10 @@ type Job[T any] func(ctx context.Context) T
 // goroutines. The poolSize defines the amount of created goroutines. So this
 // is the amount of tasks which are executed at the same time at maximum.
 //
+// Break will stop the execution of jobs. Jobs which are already being executed
+// will continue executing but the result will not be yielded. The context passed
+// to the job can be used to detect when the loop has been canceled.
+//
 // The jobs result values are yielded for the loop.
 func Parallel[T any](jobs []Job[T], poolSize int) func(yield func(T) bool) {
 	if poolSize < 1 {
